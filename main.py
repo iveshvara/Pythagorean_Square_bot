@@ -68,6 +68,7 @@ async def input_end(message: Message, state: FSMContext):
 
 async def calculation(message: Message, data):
     name = data['name']
+    name = name.replace('-', '\-')
     date = data['date'].strftime("%d%m%Y")
 
     calculation_number = ""
@@ -206,7 +207,10 @@ async def calculation(message: Message, data):
 
     result += vertical_separator + horizontal_separator
 
-    await message.answer(name + "`" + result + "`", parse_mode="MarkdownV2")
+    try:
+        await message.answer(name + ' ' + data['date'].strftime("%d\.%m\.%Y") + "`" + result + "`", parse_mode="MarkdownV2")
+    except:
+        await message.answer("Error, try again.")
 
 
 executor.start_polling(dp, skip_updates=True)
